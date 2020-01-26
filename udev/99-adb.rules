@@ -1,0 +1,2 @@
+ACTION=="bind|remove",ATTR{interface}=="ADB Interface",RUN+="$BASE/scripts/adbforward.sh $USER %E{ACTION} %S %E{DEVPATH}"
+
