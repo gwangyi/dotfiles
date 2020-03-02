@@ -13,6 +13,7 @@ Plug 'f4t-t0ny/nerdtree-hg-plugin'
 Plug 'dense-analysis/ale'
 
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'cespare/vim-toml'
 
 if has('nvim') || has('patch-8.0.902')
   Plug 'mhinz/vim-signify'
