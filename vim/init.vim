@@ -23,6 +23,7 @@ endif
 
 call plug#end()
 
+let g:solarized_termtrans=1
 silent! colorscheme solarized
 
 let g:airline_powerline_fonts = 1
