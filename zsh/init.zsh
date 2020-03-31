@@ -1,3 +1,23 @@
+#!/usr/bin/zsh
+# Find exact dotfiles directory
+function _find_dotfiles_dir() {
+    unset -f _find_dotfiles_dir
+    local SOURCE
+    local DOTFILESDIR
+    SOURCE="${(%):-%x}"
+    while [[ -h "$SOURCE" ]]; do
+        DOTFILESDIR="$(cd -P "$(dirname "$SOURCE")" 2> /dev/null; pwd)"
+        SOURCE="$(readlink "$SOURCE")"
+        [[ "$SOURCE" != /* ]] && SOURCE="$DOTFILESDIR/$SOURCE"
+    done
+    DOTFILESDIR="$(cd -P "$(dirname "$SOURCE")/.." 2> /dev/null; pwd)"
+    echo "$DOTFILESDIR"
+}
+DOTFILESDIR=$(_find_dotfiles_dir)
+
+# Corp pre-initialize things
+[[ -f "$DOTFILESDIR/corp/zsh/prepare.zsh" ]] && source "$DOTFILESDIR/corp/zsh/prepare.zsh"
+
 # get vim-plug for nvim
 [[ -f ~/.local/share/nvim/site/autoload/plug.vim ]] || \
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
@@ -6,12 +26,11 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 # load zplug
 export ZPLUG_HOME=$HOME/.zplug
 if [ ! -e "$ZPLUG_HOME" ]; then
-    git clone https://github.com/zplug/zplug $ZPLUG_HOME
+    git clone https://github.com/zplug/zplug "$ZPLUG_HOME"
 fi
 
 function _zshrc_init() {
     unset -f _zshrc_init
-    DEFAULT_USER=$(whoami)
 
     # If android
     if command -v getprop > /dev/null 2> /dev/null; then
@@ -19,8 +38,6 @@ function _zshrc_init() {
         POWERLEVEL9K_CONTEXT_TEMPLATE=$HOSTNAME
         POWERLEVEL9K_PUBLIC_IP_FILE=$TMPDIR/p9k_public_ip
     fi
-    # Add hg backend
-    POWERLEVEL9K_VCS_BACKENDS=(git hg)
 }
 _zshrc_init
 
@@ -43,7 +60,7 @@ zplug "romkatv/powerlevel10k", as:theme
 
 if ! zplug check --verbose; then
     printf "Install? [y/N]: "
-    if read -q; then
+    if read -rq; then
         echo; zplug install
     fi
 fi
@@ -63,13 +80,22 @@ bindkey '^[[B' history-substring-search-down
 ZSH_PYENV_LAZY_VIRTUALENV=1
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=23"
 
-function vimplug {
-	case $1 in
-		install) nvim "+let g:plug_window = 'enew'" "+map <cr> :qa!<cr>" +PlugInstall ;;
-		update) nvim "+let g:plug_window = 'enew'" "+map <cr> :qa!<cr>" +PlugUpdate ;;
-		upgrade) nvim "+let g:plug_window = 'enew'" "+map <cr> :qa!<cr>" +PlugUpgrade ;;
-	esac
-}
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+
+function vimplug() {
+    local -a ARGS=("+let g:plug_window='enew'")
+
+    case "$1" in
+        install)  ${VIM:-nvim} "${ARGS[@]}" +PlugInstall ;;
+        update)   ${VIM:-nvim} "${ARGS[@]}" +PlugUpdate ;;
+        upgrade)  ${VIM:-nvim} "${ARGS[@]}" +PlugUpgrade ;;
+        clean)    ${VIM:-nvim} "${ARGS[@]}" +PlugClean ;;
+        status)   ${VIM:-nvim} "${ARGS[@]}" +PlugStatus ;;
+        diff)     ${VIM:-nvim} "${ARGS[@]}" +PlugDiff ;;
+        snapshot) ${VIM:-nvim} "${ARGS[@]}" +PlugSnapshot "$2" ;;
+    esac
+}
+
+# Corp initialize things
+[[ -f "$DOTFILESDIR/corp/zsh/init.zsh" ]] && source "$DOTFILESDIR/corp/zsh/init.zsh"

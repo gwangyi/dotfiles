@@ -15,6 +15,8 @@ Plug 'dense-analysis/ale'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'cespare/vim-toml'
 
+Plug 'pedrohdz/vim-yaml-folds'
+
 if has('nvim') || has('patch-8.0.902')
   Plug 'mhinz/vim-signify'
 else
