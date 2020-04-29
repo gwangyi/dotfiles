@@ -38,5 +38,7 @@ set mouse=a
 set nu
 set nocompatible
 
+set colorcolumn=80
+
 let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 exec 'silent! source ' . s:path . '/../corp/vim/init.vim'
