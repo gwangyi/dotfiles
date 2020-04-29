@@ -42,3 +42,11 @@ set colorcolumn=80
 
 let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 exec 'silent! source ' . s:path . '/../corp/vim/init.vim'
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+autocmd FileType go setlocal sw=4 ts=4 et
