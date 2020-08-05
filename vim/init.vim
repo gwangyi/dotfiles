@@ -50,3 +50,5 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
 autocmd FileType go setlocal sw=4 ts=4 et
+
+set termguicolors
