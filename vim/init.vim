@@ -8,7 +8,7 @@ Plug 'Shougo/denite.nvim'
 Plug 'terryma/vim-multiple-cursors'
 
 Plug 'scrooloose/nerdtree'
-Plug 'f4t-t0ny/nerdtree-hg-plugin'
+Plug 'brentyi/nerdtree-hg-plugin'  " f4t-t0ny/nerdtree-hg-plugin has been broken
 
 Plug 'dense-analysis/ale'
 
