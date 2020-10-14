@@ -35,6 +35,8 @@ set laststatus=2
 
 map <Leader>e :NERDTreeFocus<cr>
 
+let g:vim_vue_plugin_use_typescript	= 1
+
 set mouse=a
 set nu
 set nocompatible
@@ -53,3 +55,4 @@ nmap ga <Plug>(EasyAlign)
 autocmd FileType go setlocal sw=4 ts=4 et
 
 set termguicolors
+set sw=2 ts=2 et
