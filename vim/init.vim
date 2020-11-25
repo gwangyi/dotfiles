@@ -64,3 +64,5 @@ autocmd FileType go setlocal sw=4 ts=4 et
 
 set termguicolors
 set sw=2 ts=2 et
+
+let $MANPAGER=''
