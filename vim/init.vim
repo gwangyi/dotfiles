@@ -2,7 +2,7 @@ let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 
 call plug#begin()
 
-exec 'silent! source ' . s:path . '/../corp/vim/init.vim'
+exec 'silent! source ' . s:path . '/../corp/vim/plugins.vim'
 
 Plug 'junegunn/vim-easy-align'
 Plug 'altercation/vim-colors-solarized'
