@@ -33,6 +33,8 @@ Plug 'prabirshrestha/vim-lsp'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 
+Plug 'ludovicchabant/vim-lawrencium'
+
 call plug#end()
 
 let g:solarized_termtrans=1

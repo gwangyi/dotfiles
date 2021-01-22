@@ -3,19 +3,19 @@
 BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 function deliver {
-    [[ -f "$HOME/$2" ]] && mv -v "$HOME/$2" "$HOME/$2.$(date +%Y%m%d)" 2> /dev/null
-    mkdir -p "$(dirname "$HOME/$2")"
-    ln -sv "$BASE/$1" "$HOME/$2" 2> /dev/null
+    [[ -f "$2" ]] && mv -v "$2" "$2.$(date +%Y%m%d)" 2> /dev/null
+    mkdir -p "$(dirname "$2")"
+    ln -sv "$BASE/$1" "$2" 2> /dev/null
 }
 
 function replace {
     python -c 'import sys; [sys.stdout.write(line.replace(sys.argv[1], sys.argv[2])) for line in sys.stdin]' "$@"
 }
 
-deliver ssh/ssh_config .ssh/config
-deliver vim/init.vim .config/nvim/init.vim
-deliver zsh/env.zsh .zshenv
-deliver zsh/init.zsh .zshrc
+deliver ssh/ssh_config "$HOME/.ssh/config"
+deliver vim/init.vim "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/init.vim"
+deliver zsh/env.zsh "$HOME/.zshenv"
+deliver zsh/init.zsh "$HOME/.zshrc"
 [[ -f "$HOME/.p10k.zsh" ]] && mv -v "$HOME/.p10k.zsh" "$HOME/.p10k.zsh.$(date +%Y%m%d)" 2> /dev/null
 cp -v "$BASE/zsh/p10k.zsh" "$HOME/.p10k.zsh" 2> /dev/null
 
