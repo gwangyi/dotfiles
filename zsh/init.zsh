@@ -3,20 +3,20 @@
 function _find_dotfiles_dir() {
     unset -f _find_dotfiles_dir
     local SOURCE
-    local DOTFILESDIR
+    local _DOTFILESDIR
     SOURCE="${(%):-%x}"
     while [[ -h "$SOURCE" ]]; do
-        DOTFILESDIR="$(cd -P "$(dirname "$SOURCE")" 2> /dev/null; pwd)"
+        _DOTFILESDIR="$(cd -P "$(dirname "$SOURCE")" 2> /dev/null; pwd)"
         SOURCE="$(readlink "$SOURCE")"
-        [[ "$SOURCE" != /* ]] && SOURCE="$DOTFILESDIR/$SOURCE"
+        [[ "$SOURCE" != /* ]] && SOURCE="$_DOTFILESDIR/$SOURCE"
     done
-    DOTFILESDIR="$(cd -P "$(dirname "$SOURCE")/.." 2> /dev/null; pwd)"
-    echo "$DOTFILESDIR"
+    _DOTFILESDIR="$(cd -P "$(dirname "$SOURCE")/.." 2> /dev/null; pwd)"
+    echo "$_DOTFILESDIR"
 }
-DOTFILESDIR=$(_find_dotfiles_dir)
+_DOTFILESDIR=$(_find_dotfiles_dir)
 
 # Corp pre-initialize things
-[[ -f "$DOTFILESDIR/corp/zsh/prepare.zsh" ]] && source "$DOTFILESDIR/corp/zsh/prepare.zsh"
+[[ -f "$_DOTFILESDIR/corp/zsh/prepare.zsh" ]] && source "$_DOTFILESDIR/corp/zsh/prepare.zsh"
 
 # get vim-plug for nvim
 [[ -f ~/.local/share/nvim/site/autoload/plug.vim ]] || \
@@ -97,10 +97,16 @@ function vimplug() {
     esac
 }
 
+function update-dotfiles() {
+    cd $_DOTFILESDIR && git pull && \
+        zplug update && \
+        ${VIM:-nvim} "+let g:plug_window='enew'" +PlugUpgrade +PlugUpdate +q
+}
+
 export MANPAGER="/bin/sh -c \"unset PAGER;col -b -x | \
     nvim -R -c 'set ft=man nomod nolist' -c 'map q :q<CR>' \
     -c 'map <SPACE> <C-D>' -c 'map b <C-U>' \
     -c 'nmap K :Man <C-R>=expand(\\\"<cword>\\\")<CR><CR>' -\""
 
 # Corp initialize things
-[[ -f "$DOTFILESDIR/corp/zsh/init.zsh" ]] && source "$DOTFILESDIR/corp/zsh/init.zsh"
+[[ -f "$_DOTFILESDIR/corp/zsh/init.zsh" ]] && source "$_DOTFILESDIR/corp/zsh/init.zsh"

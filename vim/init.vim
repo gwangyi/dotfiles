@@ -28,12 +28,16 @@ else
   Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
 endif
 
+Plug 'mattn/emmet-vim'
+
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 
 Plug 'ludovicchabant/vim-lawrencium'
+
+Plug 'lifthrasiir/hangeul.vim'
 
 call plug#end()
 
