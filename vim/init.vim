@@ -58,6 +58,8 @@ set nocompatible
 
 set colorcolumn=80
 
+let hangeul_enabled = 1
+
 exec 'silent! source ' . s:path . '/../corp/vim/init.vim'
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
