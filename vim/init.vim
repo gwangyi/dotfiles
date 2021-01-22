@@ -59,6 +59,9 @@ set nocompatible
 set colorcolumn=80
 
 let hangeul_enabled = 1
+let hangeul_default_mode = '3f'
+imap <silent> <Leader><CR> <Plug>HanConvert
+imap <silent> <Leader><Space> <Plug>HanMode
 
 exec 'silent! source ' . s:path . '/../corp/vim/init.vim'
 
