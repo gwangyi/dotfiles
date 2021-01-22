@@ -98,7 +98,7 @@ function vimplug() {
 }
 
 function update-dotfiles() {
-    cd $_DOTFILESDIR && git pull && \
+    cd $_DOTFILESDIR && git pull --recurse-submodules --rebase && \
         zplug update && \
         ${VIM:-nvim} "+let g:plug_window='enew'" +PlugUpgrade +PlugUpdate +q
 }
