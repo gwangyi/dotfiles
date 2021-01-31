@@ -5,6 +5,8 @@ alias apt='apt -o Dpkg::Options::="--force-confnew"'
 apt update
 apt dist-upgrade -y
 apt install -y openssh zsh git perl ncurses-utils neovim python python2 termux-api
+pip install -U setuptools pip wheel
+pip2 install -U setuptools pip wheel
 PY2_OUTDATED=$(pip2 list -o --format freeze)
 PY3_OUTDATED=$(pip list -o --format freeze)
 [[ -n "$PY2_OUTDATED" ]] && sed 's/=.*//' <<<"$PY2_OUTDATED" | xargs pip2 install -U
