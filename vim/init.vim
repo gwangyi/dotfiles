@@ -39,6 +39,8 @@ Plug 'ludovicchabant/vim-lawrencium'
 
 Plug 'lifthrasiir/hangeul.vim'
 
+Plug 'ojroques/vim-oscyank'
+
 call plug#end()
 
 let g:solarized_termtrans=1

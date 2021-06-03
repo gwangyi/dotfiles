@@ -21,3 +21,5 @@ export EDITOR='nvim'
 export PATH=$HOME/bin:$PATH:/snap/bin:$HOME/.cargo/bin:$HOME/.yarn/bin:$HOME/.local/bin:$HOME/go/bin:$_DOTFILESDIR/bin
 
 alias ls='ls --color=auto'
+alias node='node --experimental-repl-await'
+. "$HOME/.cargo/env"
