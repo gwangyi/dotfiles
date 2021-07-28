@@ -22,4 +22,4 @@ export PATH=$HOME/bin:$PATH:/snap/bin:$HOME/.cargo/bin:$HOME/.yarn/bin:$HOME/.lo
 
 alias ls='ls --color=auto'
 alias node='node --experimental-repl-await'
-. "$HOME/.cargo/env"
+[[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
