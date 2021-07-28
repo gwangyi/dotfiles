@@ -6,8 +6,6 @@ exec 'silent! source ' . s:path . '/../corp/vim/plugins.vim'
 
 Plug 'junegunn/vim-easy-align'
 Plug 'altercation/vim-colors-solarized'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'Shougo/denite.nvim'
 Plug 'terryma/vim-multiple-cursors'
 
@@ -16,7 +14,7 @@ Plug 'brentyi/nerdtree-hg-plugin'  " f4t-t0ny/nerdtree-hg-plugin has been broken
 
 Plug 'dense-analysis/ale'
 
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+"Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'cespare/vim-toml'
 
 Plug 'pedrohdz/vim-yaml-folds'
@@ -40,6 +38,9 @@ Plug 'ludovicchabant/vim-lawrencium'
 Plug 'lifthrasiir/hangeul.vim'
 
 Plug 'ojroques/vim-oscyank'
+
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 call plug#end()
 
