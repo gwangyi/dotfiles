@@ -20,6 +20,13 @@ export LC_ALL=en_US.UTF-8
 export EDITOR='nvim'
 export PATH=$HOME/bin:$PATH:/snap/bin:$HOME/.cargo/bin:$HOME/.yarn/bin:$HOME/.local/bin:$HOME/go/bin:$_DOTFILESDIR/bin
 
-alias ls='ls --color=auto'
+if ls --color -d . >/dev/null 2>&1; then
+    # GNU ls
+    alias ls='ls --color=auto'
+elif ls -G -d . >/dev/null 2>&1; then
+    # BSD ls
+    alias ls='ls -G'
+else
+    # Solaris ls
+fi
 alias node='node --experimental-repl-await'
-[[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
