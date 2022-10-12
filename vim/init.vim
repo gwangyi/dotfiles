@@ -79,4 +79,10 @@ autocmd FileType go setlocal sw=4 ts=4 et
 set termguicolors
 set sw=2 ts=2 et
 
-let $MANPAGER=''
+if has('nvim')
+  let $GIT_EDITOR = 'nvr -cc split --remote-wait'
+  let $HGEDITOR = 'nvr -cc split --remote-wait'
+  autocmd FileType gitcommit,gitrebase,gitconfig,hgcommit set bufhidden=delete
+endif
+autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | execute 'OSCYankReg +' | endif
+let g:oscyank_term = 'default'

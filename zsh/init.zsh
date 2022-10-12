@@ -108,5 +108,10 @@ export MANPAGER="/bin/sh -c \"unset PAGER;col -b -x | \
     -c 'map <SPACE> <C-D>' -c 'map b <C-U>' \
     -c 'nmap K :Man <C-R>=expand(\\\"<cword>\\\")<CR><CR>' -\""
 
+if [[ -n "${NVIM}" ]]; then
+  alias nvim="nvr -cc split"
+  export MANPAGER=$(sed 's/nvim/nvr -cc split/g' <<< $MANPAGER)
+fi
+
 # Corp initialize things
 [[ -f "$_DOTFILESDIR/corp/zsh/init.zsh" ]] && source "$_DOTFILESDIR/corp/zsh/init.zsh"
