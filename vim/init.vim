@@ -4,34 +4,17 @@ call plug#begin()
 
 exec 'silent! source ' . s:path . '/../corp/vim/plugins.vim'
 
-Plug 'junegunn/vim-easy-align'
 Plug 'altercation/vim-colors-solarized'
-Plug 'Shougo/denite.nvim'
 Plug 'terryma/vim-multiple-cursors'
 
 Plug 'scrooloose/nerdtree'
 Plug 'brentyi/nerdtree-hg-plugin'  " f4t-t0ny/nerdtree-hg-plugin has been broken
-
-Plug 'dense-analysis/ale'
-
-"Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-Plug 'cespare/vim-toml'
-
-Plug 'pedrohdz/vim-yaml-folds'
-Plug 'leafOfTree/vim-vue-plugin'
 
 if has('nvim') || has('patch-8.0.902')
   Plug 'mhinz/vim-signify'
 else
   Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
 endif
-
-Plug 'mattn/emmet-vim'
-
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
 
 Plug 'ludovicchabant/vim-lawrencium'
 
@@ -41,6 +24,21 @@ Plug 'ojroques/vim-oscyank'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+
+" LSP
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-nvim-lua'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/vim-vsnip'
+Plug 'neovim/nvim-lspconfig'
+Plug 'onsails/lspkind.nvim'
+
+" Diagnostics
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'folke/trouble.nvim'
 
 call plug#end()
 
@@ -52,8 +50,6 @@ let g:airline#extensions#branch#enabled = 1
 set laststatus=2
 
 map <Leader>e :NERDTreeFocus<cr>
-
-let g:vim_vue_plugin_use_typescript	= 1
 
 set mouse=a
 set nu
@@ -67,12 +63,6 @@ imap <silent> <Leader><CR> <Plug>HanConvert
 imap <silent> <Leader><Space> <Plug>HanMode
 
 exec 'silent! source ' . s:path . '/../corp/vim/init.vim'
-
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
 
 autocmd FileType go setlocal sw=4 ts=4 et
 

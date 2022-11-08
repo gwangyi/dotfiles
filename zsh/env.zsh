@@ -30,3 +30,4 @@ else
     # Solaris ls
 fi
 alias node='node --experimental-repl-await'
+test -e "$HOME/.cargo/env" && . "$HOME/.cargo/env"
