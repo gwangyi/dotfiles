@@ -1,4 +1,8 @@
 let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
+lua <<EOF
+  local path = vim.api.nvim_eval("fnamemodify(resolve(expand('<sfile>:p')), ':h')")
+  package.path = package.path .. ';' .. path .. '/lua/?.lua'
+EOF
 
 call plug#begin()
 
@@ -76,3 +80,8 @@ if has('nvim')
 endif
 autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | execute 'OSCYankReg +' | endif
 let g:oscyank_term = 'default'
+
+lua <<EOF
+  require('lsp').setup()
+  require('diagnotics')
+EOF
