@@ -13,13 +13,13 @@ lspkind.init()
 local cmp = require("cmp")
 
 cmp.setup({
-  mapping = {
+  mapping = cmp.mapping.preset.insert({
     ["<C-d>"] = cmp.mapping.scroll_docs(-4),
     ["<C-u>"] = cmp.mapping.scroll_docs(4),
     ["<C-e>"] = cmp.mapping.close(),
     ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
     ["<C-m>"] = cmp.mapping.confirm({ select = true }),
-  },
+  }),
 
   sources = {
     { name = "nvim_lsp" },
