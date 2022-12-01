@@ -12,73 +12,6 @@ lspkind.init()
 
 local cmp = require("cmp")
 
-cmp.setup({
-  mapping = cmp.mapping.preset.insert({
-    ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-    ["<C-u>"] = cmp.mapping.scroll_docs(4),
-    ["<C-e>"] = cmp.mapping.close(),
-    ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
-    ["<C-m>"] = cmp.mapping.confirm({ select = true }),
-  }),
-
-  sources = {
-    { name = "nvim_lsp" },
-    { name = "path" },
-    { name = "vim_vsnip" },
-    { name = "buffer", keyword_length = 5 },
-  },
-
-  sorting = {
-    comparators = {
-      cmp.config.compare.offset,
-      cmp.config.compare.exact,
-      cmp.config.compare.score,
-
-      function(entry1, entry2)
-        local _, entry1_under = entry1.completion_item.label:find("^_+")
-        local _, entry2_under = entry2.completion_item.label:find("^_+")
-        entry1_under = entry1_under or 0
-        entry2_under = entry2_under or 0
-        if entry1_under > entry2_under then
-          return false
-        elseif entry1_under < entry2_under then
-          return true
-        end
-      end,
-
-      cmp.config.compare.kind,
-      cmp.config.compare.sort_text,
-      cmp.config.compare.length,
-      cmp.config.compare.order,
-    },
-  },
-
-  snippet = {
-    expand = function(args)
-      vim.fn["vsnip#anonymous"](args.body)
-    end,
-  },
-
-  formatting = {
-    format = lspkind.cmp_format({
-      with_text = true,
-      maxwidth = 40, -- half max width
-      menu = {
-        buffer = "[buffer]",
-        nvim_lsp = "[LSP]",
-        nvim_lua = "[API]",
-        path = "[path]",
-        vim_vsnip = "[snip]",
-      },
-    }),
-  },
-
-  experimental = {
-    native_menu = false,
-    ghost_text = true,
-  },
-})
-
 vim.cmd([[
   augroup CmpZsh
     au!
@@ -122,10 +55,78 @@ local on_attach = function(client, bufnr)
 end
 
 local exports = {
+  cmp_config = {
+    mapping = cmp.mapping.preset.insert({
+      ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+      ["<C-u>"] = cmp.mapping.scroll_docs(4),
+      ["<C-e>"] = cmp.mapping.close(),
+      ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
+      ["<C-m>"] = cmp.mapping.confirm({ select = true }),
+    }),
+
+    sources = {
+      { name = "nvim_lsp" },
+      { name = "path" },
+      { name = "vim_vsnip" },
+      { name = "buffer", keyword_length = 5 },
+    },
+
+    sorting = {
+      comparators = {
+        cmp.config.compare.offset,
+        cmp.config.compare.exact,
+        cmp.config.compare.score,
+
+        function(entry1, entry2)
+          local _, entry1_under = entry1.completion_item.label:find("^_+")
+          local _, entry2_under = entry2.completion_item.label:find("^_+")
+          entry1_under = entry1_under or 0
+          entry2_under = entry2_under or 0
+          if entry1_under > entry2_under then
+            return false
+          elseif entry1_under < entry2_under then
+            return true
+          end
+        end,
+
+        cmp.config.compare.kind,
+        cmp.config.compare.sort_text,
+        cmp.config.compare.length,
+        cmp.config.compare.order,
+      },
+    },
+
+    snippet = {
+      expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body)
+      end,
+    },
+
+    formatting = {
+      format = lspkind.cmp_format({
+        with_text = true,
+        maxwidth = 40, -- half max width
+        menu = {
+          buffer = "[buffer]",
+          nvim_lsp = "[LSP]",
+          nvim_lua = "[API]",
+          path = "[path]",
+          vim_vsnip = "[snip]",
+        },
+      }),
+    },
+
+    experimental = {
+      native_menu = false,
+      ghost_text = true,
+    },
+  },
   configs = {gopls = {}},
 }
 
 exports.setup = function()
+  cmp.setup(exports.cmp_config)
+
   local capabilities = require("cmp_nvim_lsp").default_capabilities()
   for name, config in pairs(exports.configs) do
     local merged_config = {
