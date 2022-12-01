@@ -16,6 +16,7 @@ deliver ssh/ssh_config "$HOME/.ssh/config"
 deliver vim/init.vim "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/init.vim"
 deliver zsh/env.zsh "$HOME/.zshenv"
 deliver zsh/init.zsh "$HOME/.zshrc"
+deliver tmux/tmux.conf "$HOME/.byobu/.tmux.conf"
 [[ -f "$HOME/.p10k.zsh" ]] && mv -v "$HOME/.p10k.zsh" "$HOME/.p10k.zsh.$(date +%Y%m%d)" 2> /dev/null
 cp -v "$BASE/zsh/p10k.zsh" "$HOME/.p10k.zsh" 2> /dev/null
 
