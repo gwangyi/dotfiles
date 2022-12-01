@@ -1,17 +1,13 @@
 let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
-lua <<EOF
-  local path = vim.api.nvim_eval("fnamemodify(resolve(expand('<sfile>:p')), ':h')")
-  package.path = package.path .. ';' .. path .. '/lua/?.lua'
-EOF
 
 call plug#begin()
 
 exec 'silent! source ' . s:path . '/../corp/vim/plugins.vim'
 
 Plug 'altercation/vim-colors-solarized'
-Plug 'terryma/vim-multiple-cursors'
+Plug 'mg979/vim-visual-multi'
 
-Plug 'scrooloose/nerdtree'
+Plug 'preservim/nerdtree'
 Plug 'brentyi/nerdtree-hg-plugin'  " f4t-t0ny/nerdtree-hg-plugin has been broken
 
 if has('nvim') || has('patch-8.0.902')
@@ -24,34 +20,42 @@ Plug 'ludovicchabant/vim-lawrencium'
 
 Plug 'lifthrasiir/hangeul.vim'
 
-Plug 'ojroques/vim-oscyank'
+if has('nvim')
+  Plug 'ojroques/nvim-osc52'
+else
+  Plug 'ojroques/vim-oscyank'
+endif
 
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+Plug 'nvim-lualine/lualine.nvim'
 
-" LSP
-Plug 'hrsh7th/cmp-buffer'
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'hrsh7th/cmp-nvim-lua'
-Plug 'hrsh7th/cmp-path'
-Plug 'hrsh7th/cmp-vsnip'
-Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/vim-vsnip'
-Plug 'neovim/nvim-lspconfig'
-Plug 'onsails/lspkind.nvim'
+Plug 'liuchengxu/vista.vim'
 
-" Diagnostics
-Plug 'kyazdani42/nvim-web-devicons'
-Plug 'folke/trouble.nvim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+if has('nvim')
+  Plug 'nvim-lua/plenary.nvim'           " lua helpers
+  Plug 'nvim-telescope/telescope.nvim'   " actual plugin
+  Plug 'jackysee/telescope-hg.nvim'
+
+  " LSP
+  Plug 'hrsh7th/cmp-buffer'
+  Plug 'hrsh7th/cmp-nvim-lsp'
+  Plug 'hrsh7th/cmp-nvim-lua'
+  Plug 'hrsh7th/cmp-path'
+  Plug 'hrsh7th/cmp-vsnip'
+  Plug 'hrsh7th/nvim-cmp'
+  Plug 'hrsh7th/vim-vsnip'
+  Plug 'neovim/nvim-lspconfig'
+  Plug 'onsails/lspkind.nvim'
+
+  " Diagnostics
+  Plug 'kyazdani42/nvim-web-devicons'
+  Plug 'folke/trouble.nvim'
+endif
 
 call plug#end()
 
-let g:solarized_termtrans=1
 silent! colorscheme solarized
-
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#branch#enabled = 1
-set laststatus=2
 
 map <Leader>e :NERDTreeFocus<cr>
 
@@ -66,6 +70,11 @@ let hangeul_default_mode = '3f'
 imap <silent> <Leader><CR> <Plug>HanConvert
 imap <silent> <Leader><Space> <Plug>HanMode
 
+lua <<EOF
+  local path = vim.api.nvim_eval([[fnamemodify(resolve(expand('<sfile>:p')), ':h')]])
+  package.path = package.path .. ';' .. path .. '/lua/?.lua'
+EOF
+
 exec 'silent! source ' . s:path . '/../corp/vim/init.vim'
 
 autocmd FileType go setlocal sw=4 ts=4 et
@@ -78,10 +87,42 @@ if has('nvim')
   let $HGEDITOR = 'nvr -cc split --remote-wait'
   autocmd FileType gitcommit,gitrebase,gitconfig,hgcommit set bufhidden=delete
 endif
-autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | execute 'OSCYankReg +' | endif
-let g:oscyank_term = 'default'
+
+if has('nvim')
+  lua <<EOF
+    local function copy(lines, _)
+    require('osc52').copy(table.concat(lines, '\n'))
+  end
+
+  local function paste()
+    return {vim.fn.split(vim.fn.getreg(''), '\n'), vim.fn.getregtype('')}
+  end
+
+  vim.g.clipboard = {
+    name = 'osc52',
+    copy = {['+'] = copy, ['*'] = copy},
+    paste = {['+'] = paste, ['*'] = paste},
+  }
+EOF
+else
+  autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | execute 'OSCYankReg +' | endif
+  let g:oscyank_term = 'default'
+endif
 
 lua <<EOF
-  require('lsp').setup()
-  require('diagnotics')
+  require('init-lsp').setup()
+  require('init-diag')
+  require('lualine').setup {
+    options = {
+      theme = 'solarized_dark',
+    }
+  }
+  require'nvim-treesitter.configs'.setup {
+    -- Modules and its options go here
+    ensure_installed = "all",
+    highlight = { enable = true },
+    incremental_selection = { enable = true },
+    textobjects = { enable = true },
+    indent = { enable = true },
+  }
 EOF
