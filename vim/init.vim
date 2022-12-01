@@ -37,7 +37,6 @@ Plug 'nvim-neo-tree/neo-tree.nvim'
 if has('nvim')
   Plug 'nvim-lua/plenary.nvim'           " lua helpers
   Plug 'nvim-telescope/telescope.nvim'   " actual plugin
-  Plug 'jackysee/telescope-hg.nvim'
 
   " LSP
   Plug 'hrsh7th/cmp-buffer'
