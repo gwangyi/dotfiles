@@ -1,14 +1,13 @@
 let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 
+let g:neo_tree_remove_legacy_commands = 1
+
 call plug#begin()
 
 exec 'silent! source ' . s:path . '/../corp/vim/plugins.vim'
 
 Plug 'altercation/vim-colors-solarized'
 Plug 'mg979/vim-visual-multi'
-
-Plug 'preservim/nerdtree'
-Plug 'brentyi/nerdtree-hg-plugin'  " f4t-t0ny/nerdtree-hg-plugin has been broken
 
 if has('nvim') || has('patch-8.0.902')
   Plug 'mhinz/vim-signify'
@@ -31,6 +30,9 @@ Plug 'nvim-lualine/lualine.nvim'
 Plug 'liuchengxu/vista.vim'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+Plug 'MunifTanjim/nui.nvim'
+Plug 'nvim-neo-tree/neo-tree.nvim'
 
 if has('nvim')
   Plug 'nvim-lua/plenary.nvim'           " lua helpers
@@ -57,7 +59,7 @@ call plug#end()
 
 silent! colorscheme solarized
 
-map <Leader>e :NERDTreeFocus<cr>
+map <Leader>e <cmd>Neotree left filesystem toggle<cr>
 
 set mouse=a
 set nu
