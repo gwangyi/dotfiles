@@ -30,6 +30,7 @@ Plug 'nvim-lualine/lualine.nvim'
 Plug 'liuchengxu/vista.vim'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/playground'
 
 Plug 'MunifTanjim/nui.nvim'
 Plug 'nvim-neo-tree/neo-tree.nvim'
@@ -126,4 +127,7 @@ lua <<EOF
     textobjects = { enable = true },
     indent = { enable = true },
   }
+  if vim.treesitter.highlighter.hl_map ~= nil then
+    vim.treesitter.highlighter.hl_map.error = nil
+  end
 EOF
