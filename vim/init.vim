@@ -114,14 +114,20 @@ endif
 lua <<EOF
   require('init-lsp').setup()
   require('init-diag')
+  local getScriptFunc = require('snrhelper').getScriptFunc
+
   require('lualine').setup {
     options = {
       theme = 'solarized_dark',
+    },
+    sections = {
+      lualine_y = { getScriptFunc('hangeul.vim', 'ModeString'), 'progress' }
     }
   }
   require'nvim-treesitter.configs'.setup {
     -- Modules and its options go here
     ensure_installed = "all",
+    -- sync_install = true,  -- Uncomment when installing on small machine
     highlight = { enable = true },
     incremental_selection = { enable = true },
     textobjects = { enable = true },
