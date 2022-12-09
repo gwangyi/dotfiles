@@ -79,7 +79,7 @@ EOF
 
 exec 'silent! source ' . s:path . '/../corp/vim/init.vim'
 
-autocmd FileType go setlocal sw=4 ts=4 et
+autocmd FileType go setlocal sw=4 ts=4 noet
 
 set termguicolors
 set sw=2 ts=2 et
