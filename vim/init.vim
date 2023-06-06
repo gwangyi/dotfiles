@@ -8,6 +8,7 @@ exec 'silent! source ' . s:path . '/../corp/vim/plugins.vim'
 
 Plug 'altercation/vim-colors-solarized'
 Plug 'mg979/vim-visual-multi'
+Plug 'rcarriga/nvim-notify'
 
 if has('nvim') || has('patch-8.0.902')
   Plug 'mhinz/vim-signify'
@@ -119,7 +120,7 @@ lua <<EOF
   require'nvim-treesitter.configs'.setup {
     -- Modules and its options go here
     ensure_installed = "all",
-    -- sync_install = true,  -- Uncomment when installing on small machine
+    sync_install = true,  -- Uncomment when installing on small machine
     highlight = { enable = true },
     incremental_selection = { enable = true },
     textobjects = { enable = true },
@@ -128,4 +129,7 @@ lua <<EOF
   if vim.treesitter.highlighter.hl_map ~= nil then
     vim.treesitter.highlighter.hl_map.error = nil
   end
+  vim.opt.termguicolors = true
 EOF
+
+let g:python3_host_prog = '/usr/bin/python3'
