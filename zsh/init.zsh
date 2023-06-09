@@ -117,3 +117,5 @@ fi
 [[ -f "$_DOTFILESDIR/corp/zsh/init.zsh" ]] && source "$_DOTFILESDIR/corp/zsh/init.zsh"
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+# --- Local configurations
