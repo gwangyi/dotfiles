@@ -16,7 +16,7 @@ else
   Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
 endif
 
-Plug 'ludovicchabant/vim-lawrencium'
+"Plug 'ludovicchabant/vim-lawrencium'
 
 Plug 'lifthrasiir/hangeul.vim'
 
@@ -36,9 +36,15 @@ Plug 'nvim-treesitter/playground'
 Plug 'MunifTanjim/nui.nvim'
 Plug 'nvim-neo-tree/neo-tree.nvim'
 
+Plug 'lambdalisue/suda.vim'
+Plug 'smartpde/tree-sitter-cpp-google'
+Plug 'L3MON4D3/LuaSnip', {'do': 'make install_jsregexp'}
+
 if has('nvim')
   Plug 'nvim-lua/plenary.nvim'           " lua helpers
   Plug 'nvim-telescope/telescope.nvim'   " actual plugin
+
+  Plug 'ipod825/libp.nvim'
 
   " LSP
   Plug 'hrsh7th/cmp-buffer'
@@ -113,10 +119,13 @@ else
 endif
 
 lua <<EOF
+  require('libp').setup()
   require('init-lsp').setup()
   require('init-diag')
 
   require'lualine'.setup(require'lualine-config')
+
+  require('tree-sitter-cpp-google').setup()
   require'nvim-treesitter.configs'.setup {
     -- Modules and its options go here
     ensure_installed = "all",
