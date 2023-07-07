@@ -26,4 +26,14 @@ echo "Install udev rule for adb forwarding..."
 
 echo dircolors.ansi-dark > "$HOME/.zsh-dircolors.conf"
 
+echo "Generate wezterm config..."
+
+cat > "$HOME/.wezterm.lua" <<EOF
+local wezterm = require 'wezterm'
+
+package.path = '$BASE/wezterm/?.lua;' .. package.path
+
+return require('config')(wezterm)
+EOF
+
 [[ -f "$HOME/.ssh/id_rsa" ]] || ssh-keygen -f "$HOME/.ssh/id_rsa" -N '' && (echo -n "SSH pub key: "; cat "$HOME/.ssh/id_rsa.pub")
