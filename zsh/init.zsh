@@ -55,6 +55,7 @@ zplug "oz/safe-paste"
 zplug "zlsun/solarized-man"
 zplug "AnonGuy/yapipenv.zsh"
 zplug "zsh-users/zsh-history-substring-search"
+zplug "wez/wezterm", use:'assets/shell-integration/wezterm.sh', depth:5
 
 zplug "romkatv/powerlevel10k", as:theme
 
