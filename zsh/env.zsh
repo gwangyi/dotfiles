@@ -33,3 +33,5 @@ alias node='node --experimental-repl-await'
 test -e "$HOME/.cargo/env" && . "$HOME/.cargo/env"
 
 # --- Local configurations
+
+test -e "$_DOTFILESDIR/zsh/local.env.zsh" && . "$_DOTFILESDIR/zsh/local.env.zsh"
