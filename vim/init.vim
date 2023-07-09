@@ -39,6 +39,7 @@ Plug 'nvim-neo-tree/neo-tree.nvim'
 Plug 'lambdalisue/suda.vim'
 Plug 'smartpde/tree-sitter-cpp-google'
 Plug 'L3MON4D3/LuaSnip', {'do': 'make install_jsregexp'}
+Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
 
 if has('nvim')
   Plug 'nvim-lua/plenary.nvim'           " lua helpers
