@@ -15,6 +15,12 @@ function _find_dotfiles_dir() {
 }
 _DOTFILESDIR=$(_find_dotfiles_dir)
 
+if [[ "$(basename "${WEZTERM_EXECUTABLE}")" = "wezterm-mux-server" ]]; then
+  # We are running in wezterm mux mode
+  export SSH_AUTH_SOCK="$HOME/.wezterm-auth-sock"
+fi
+
+
 # Corp pre-initialize things
 [[ -f "$_DOTFILESDIR/corp/zsh/prepare.zsh" ]] && source "$_DOTFILESDIR/corp/zsh/prepare.zsh"
 
