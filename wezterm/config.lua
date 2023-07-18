@@ -31,6 +31,13 @@ function apply (wezterm)
     },
   }
 
+  config.keys = {
+    { key = 'UpArrow', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollToPrompt(-1) },
+    { key = 'DownArrow', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollToPrompt(1) },
+    { key = 'UpArrow', mods = 'SHIFT', action = wezterm.action.ScrollByLine(-1) },
+    { key = 'DownArrow', mods = 'SHIFT', action = wezterm.action.ScrollByLine(1) },
+  }
+
   local status, err = pcall(function() require('corp')(config, wezterm) end)
   if err ~= nil then
     wezterm.log_warn(err)
