@@ -1,4 +1,5 @@
 #!/usr/bin/zsh
+
 # Find exact dotfiles directory
 function _find_dotfiles_dir() {
     unset -f _find_dotfiles_dir
@@ -20,9 +21,18 @@ if [[ "$(basename "${WEZTERM_EXECUTABLE}")" = "wezterm-mux-server" ]]; then
   export SSH_AUTH_SOCK="$HOME/.wezterm-auth-sock"
 fi
 
-
 # Corp pre-initialize things
 [[ -f "$_DOTFILESDIR/corp/zsh/prepare.zsh" ]] && source "$_DOTFILESDIR/corp/zsh/prepare.zsh"
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block, everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
 # get vim-plug for nvim
 [[ -f ~/.local/share/nvim/site/autoload/plug.vim ]] || \
@@ -72,13 +82,6 @@ if ! zplug check --verbose; then
     fi
 fi
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block, everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 zplug load
 
 bindkey '^[[A' history-substring-search-up
@@ -86,9 +89,6 @@ bindkey '^[[B' history-substring-search-down
 
 ZSH_PYENV_LAZY_VIRTUALENV=1
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=23"
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
 function vimplug() {
     local -a ARGS=("+let g:plug_window='enew'")
@@ -126,3 +126,5 @@ fi
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 # --- Local configurations
+
+export PATH="/Users/sungkwanglee/.detaspace/bin:$PATH"
