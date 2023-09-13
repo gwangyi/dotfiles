@@ -22,6 +22,11 @@ config.font = wezterm.font 'MesloLGS NF'
 config.font_size = 15
 
 config.hyperlink_rules = wezterm.default_hyperlink_rules()
+table.insert(config.hyperlink_rules, {
+  regex = 'Plug [\'"]([a-z0-9\\-_]+/[a-z0-9\\-_]+)[\'"]',
+  format = 'https://github.com/$1',
+  highlight = 1,
+})
 
 config.mouse_bindings = {
   {
@@ -31,12 +36,24 @@ config.mouse_bindings = {
   },
 }
 
+config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1000 }
 config.keys = {
   { key = 'UpArrow', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollToPrompt(-1) },
   { key = 'DownArrow', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollToPrompt(1) },
   { key = 'UpArrow', mods = 'SHIFT', action = wezterm.action.ScrollByLine(-1) },
   { key = 'DownArrow', mods = 'SHIFT', action = wezterm.action.ScrollByLine(1) },
 }
+
+wezterm.on('user-var-changed', function(window, pane, name, value)
+  if name == "__OPEN_URI" then
+    local chrome_profile = pane:get_user_vars().CHROME_PROFILE
+    if chrome_profile == nil then
+      wezterm.run_child_process{wezterm.home_dir .. "/bin/chrome", value}
+    else
+      wezterm.run_child_process{wezterm.home_dir .. "/bin/chrome", "--profile-email=" .. chrome_profile, value}
+    end
+  end
+end)
 
 local status, err = pcall(function() require('corp/wezterm')(config, wezterm) end)
 if err ~= nil then
