@@ -87,6 +87,13 @@ zplug load
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
+# Mac home/end key mapping
+bindkey  "^[[H"   beginning-of-line
+bindkey  "^[[1;2D"   beginning-of-line
+bindkey  "^[[F"   end-of-line
+bindkey  "^[[1;2C"   end-of-line
+bindkey  "^[[3~"  delete-char
+
 ZSH_PYENV_LAZY_VIRTUALENV=1
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=23"
 
