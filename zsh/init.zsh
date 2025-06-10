@@ -132,6 +132,7 @@ zpm load @exec/cargo-binstall,origin:"cargo binstall -y cargo-binstall > /dev/nu
 zpm load @exec/go,origin:"[ -e 'go${_GO_VERSION}.tar.gz' ] || (curl -fSL https://go.dev/dl/go${_GO_VERSION}.${_os}-${_go_arch}.tar.gz -o go${_GO_VERSION}.tar.gz && (rm go -rf; tar xf 'go${_GO_VERSION}.tar.gz') ) > /dev/null 2>&1; echo export GOROOT=\"\${Plugin_destination_path:h}/go\"",path:go/bin,apply:source:path
 zpm load @exec/ripgrep,origin:"cargo binstall -y ripgrep > /dev/null 2>&1"
 zpm load @exec/lsd,origin:"cargo binstall -y lsd > /dev/null 2>&1 && echo alias ls=lsd"
+zpm load @dir/nvim-dotfiles,origin:"${_dotfiles_dir}/nvim",apply:source,hook:"./hook.sh"
 zpm load zsh-users/zsh-completions
 
 zpm load zdharma-continuum/fast-syntax-highlighting

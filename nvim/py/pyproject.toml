@@ -1,0 +1,9 @@
+[project]
+name = "py"
+version = "0.1.0"
+description = "Neovim python environment"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pynvim>=0.5.2",
+]
