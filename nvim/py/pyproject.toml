@@ -6,5 +6,6 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "hererocks>=0.25.1",
+    "neovim-remote>=2.5.1",
     "pynvim>=0.5.2",
 ]

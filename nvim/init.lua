@@ -26,6 +26,13 @@ vim.g.maplocalleader = '\\'
 
 vim.g.python3_host_prog = path .. '/py/.venv/bin/python'
 vim.g.clipboard = 'osc52'
+
+vim.env.EDITOR = path .. '/py/.venv/bin/nvr -cc split --remote-wait'
+-- Let neovim close the buffer when we finish editing the commit messages.
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'gitcommit,gitrebase,gitconfig,hgcommit',
+  command = [[set bufhidden=delete]]
+})
 -- }}}
 
 -- {{{ luarocks
