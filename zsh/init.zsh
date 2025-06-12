@@ -130,6 +130,7 @@ zpm load @empty/cargo-binstall,hook:"cargo binstall -y cargo-binstall",async
 zpm load @empty/go,hook:"${_dotfiles_dir}/zsh/go-installer.sh \"${_GO_VERSION}\" \"\${Plugin_path}\"",path:go/bin,source:plugin.zsh,apply:source:path,async
 zpm load @empty/ripgrep,hook:"cargo binstall -y ripgrep",async
 zpm load @exec/lsd,origin:"echo alias ls=lsd",hook:"cargo binstall -y lsd",async
+zpm load @empty/gopls,hook:"go install golang.org/x/tools/gopls@latest",async
 zpm load @dir/nvim-dotfiles,origin:"${_dotfiles_dir}/nvim",apply:source,hook:"./hook.sh",async
 zpm load zsh-users/zsh-completions
 
