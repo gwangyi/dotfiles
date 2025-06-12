@@ -131,6 +131,8 @@ zpm load @empty/go,hook:"${_dotfiles_dir}/zsh/go-installer.sh \"${_GO_VERSION}\"
 zpm load @empty/ripgrep,hook:"cargo binstall -y ripgrep",async
 zpm load @exec/lsd,origin:"echo alias ls=lsd",hook:"cargo binstall -y lsd",async
 zpm load @empty/gopls,hook:"go install golang.org/x/tools/gopls@latest",async
+zpm load @empty/clangd,hook:"${_dotfiles_dir}/zsh/clangd-installer.sh \"${_clangd_version}\" \"\${Plugin_path}\"",apply:path,async
+zpm load @empty/compiledb,hook:"go install github.com/fcying/compiledb-go/cmd/compiledb@latest",async
 zpm load @dir/nvim-dotfiles,origin:"${_dotfiles_dir}/nvim",apply:source,hook:"./hook.sh",async
 zpm load zsh-users/zsh-completions
 
