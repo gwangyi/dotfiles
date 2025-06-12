@@ -81,11 +81,9 @@ local _arch="$(uname -m)"
 case "$_arch" in
     aarch64)
         _nvim_arch=arm64
-        _go_arch=arm64
         ;;
     x86_64)
         _nvim_arch=x86_64
-        _go_arch=amd64
         ;;
     *)
         _nvim_arch="${_arch}"
@@ -124,21 +122,19 @@ fi
 source "${ZPM_PLUGINS}/@zpm/zpm.zsh"
 
 zpm load romkatv/powerlevel10k
-zpm load junegunn/fzf,hook:"./install --bin && cat shell/*.zsh > init.zsh"
-zpm load @remote/nvim,origin:"https://github.com/neovim/neovim/releases/download/nightly/nvim-${_os}-${_nvim_arch}.appimage",destination:bin,apply:path
-zpm load @exec/uv,origin:"uv self update > /dev/null 2>&1; echo '_add_path \"${HOME}/.local/bin\"'",apply:source
-zpm load @exec/rustup,origin:"rustup self update > /dev/null 2>&1; cat \"${HOME}/.cargo/env\"",apply:source
-zpm load @exec/cargo-binstall,origin:"cargo binstall -y cargo-binstall > /dev/null 2>&1"
-zpm load @exec/go,origin:"[ -e 'go${_GO_VERSION}.tar.gz' ] || (curl -fSL https://go.dev/dl/go${_GO_VERSION}.${_os}-${_go_arch}.tar.gz -o go${_GO_VERSION}.tar.gz && (rm go -rf; tar xf 'go${_GO_VERSION}.tar.gz') ) > /dev/null 2>&1; echo export GOROOT=\"\${Plugin_destination_path:h}/go\"",path:go/bin,apply:source:path
-zpm load @exec/ripgrep,origin:"cargo binstall -y ripgrep > /dev/null 2>&1"
-zpm load @exec/lsd,origin:"cargo binstall -y lsd > /dev/null 2>&1 && echo alias ls=lsd"
-zpm load @dir/nvim-dotfiles,origin:"${_dotfiles_dir}/nvim",apply:source,hook:"./hook.sh"
+zpm load junegunn/fzf,hook:"./install --bin && cat shell/*.zsh > init.zsh",async
+zpm load @remote/nvim,origin:"https://github.com/neovim/neovim/releases/download/nightly/nvim-${_os}-${_nvim_arch}.appimage",destination:bin,apply:path,async
+zpm load @exec/uv,origin:"echo _add_path \"${HOME}/.local/bin\"; ${HOME}/.local/bin/uv generate-shell-completion zsh",hook:"uv self update",apply:source,async
+zpm load @file/rustup,origin:"${HOME}/.cargo/env",hook:"rustup self update",apply:source,async
+zpm load @empty/cargo-binstall,hook:"cargo binstall -y cargo-binstall",async
+zpm load @empty/go,hook:"${_dotfiles_dir}/zsh/go-installer.sh \"${_GO_VERSION}\" \"\${Plugin_path}\"",path:go/bin,source:plugin.zsh,apply:source:path,async
+zpm load @empty/ripgrep,hook:"cargo binstall -y ripgrep",async
+zpm load @exec/lsd,origin:"echo alias ls=lsd",hook:"cargo binstall -y lsd",async
+zpm load @dir/nvim-dotfiles,origin:"${_dotfiles_dir}/nvim",apply:source,hook:"./hook.sh",async
 zpm load zsh-users/zsh-completions
 
 zpm load zdharma-continuum/fast-syntax-highlighting
 # }}}
-
-eval "$(uv generate-shell-completion zsh)"
 
 # {{{ Powerlevel10k configuration
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
