@@ -72,8 +72,14 @@ return {
   {
     'neovim/nvim-lspconfig',
     config = function()
-      require('lspconfig').gopls.setup(require('helpers.lspconfig').config{
+      local lspconfig = require'lspconfig'
+      lspconfig.gopls.setup(require('helpers.lspconfig').config{
         single_file_support = false,
+        root_dir = lspconfig.util.root_pattern('go.mod'),
+      })
+      lspconfig.clangd.setup(require('helpers.lspconfig').config{
+        cmd = { 'clangd', '--query-driver=/usr/bin/gcc' },
+        root_dir = lspconfig.util.root_pattern('compile_commands.json'),
       })
 
       vim.opt.completeopt = { "menu", "menuone", "noselect" }
