@@ -2,20 +2,20 @@
 
 _arch="$(uname -m)"
 case "$_arch" in
-    aarch64)
-        _arch=arm64
-        ;;
-    x86_64)
-        _arch=amd64
-        ;;
+	aarch64)
+		_arch=arm64
+		;;
+	x86_64)
+		_arch=amd64
+		;;
 esac
 
 _os="$(uname -s)"
 case "$_os" in
-    Linux)
-        _os=linux
-        ;;
-    # TODO: MacOS
+	Linux)
+		_os=linux
+		;;
+		# TODO: MacOS
 esac
 
 _go_version="$1"
@@ -25,10 +25,14 @@ _destination="$(realpath ${2:-.})"
 
 if [ ! -e "${_destination}/go${_go_version}.tar.gz" ]; then
 	curl -fSL "https://go.dev/dl/go${_go_version}.${_os}-${_arch}.tar.gz" -o ${_destination}/go${_go_version}.tar.gz || exit $!
-	rm "${_destination}/go" -rf 2> /dev/null
-	tar xf "${_destination}/go${_go_version}.tar.gz" -C "${_destination}" || exit $!
-	cat <<EOF > ${_destination}/plugin.zsh
+fi
+
+${_destination}/go/bin/go version | grep ${_go_version} > /dev/null && exit 0
+
+rm "${_destination}/go" -rf 2> /dev/null
+tar xf "${_destination}/go${_go_version}.tar.gz" -C "${_destination}" || exit $!
+
+cat <<EOF > ${_destination}/plugin.zsh
 export GOROOT="${_destination}/go"
 _add_path "$(${_destination}/go/bin/go env GOPATH)/bin"
 EOF
-fi

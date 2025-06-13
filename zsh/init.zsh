@@ -44,7 +44,6 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 # }}}
 
 # {{{ Configuration 
-local _GO_VERSION=1.24.3
 export BINSTALL_MAXIMUM_RESOLUTION_TIMEOUT=60
 # }}}
 
@@ -76,14 +75,16 @@ function _find_dotfiles_dir() {
 local _dotfiles_dir="$(_find_dotfiles_dir)"
 # }}}
 
+# {{{ Version
+eval "$(grep -Ev "^#" $(_find_dotfiles_dir)/zsh/versions.env | sed 's/\([^=]*\)=\(.*\)/local _\1_version=\2/')"
+# }}}
+
 # {{{ OS and Arch detection
 local _arch="$(uname -m)"
+local _nvim_arch
 case "$_arch" in
     aarch64)
         _nvim_arch=arm64
-        ;;
-    x86_64)
-        _nvim_arch=x86_64
         ;;
     *)
         _nvim_arch="${_arch}"
@@ -123,11 +124,11 @@ source "${ZPM_PLUGINS}/@zpm/zpm.zsh"
 
 zpm load romkatv/powerlevel10k
 zpm load junegunn/fzf,hook:"./install --bin && cat shell/*.zsh > init.zsh",async
-zpm load @remote/nvim,origin:"https://github.com/neovim/neovim/releases/download/nightly/nvim-${_os}-${_nvim_arch}.appimage",destination:bin,apply:path,async
+zpm load @empty/nvim,hook:"${_dotfiles_dir}/zsh/nvim-installer.sh \"${_nvim_version}\" \"\${Plugin_path}\"",path:nvim/bin,source:plugin.zsh,apply:path:source,async
 zpm load @exec/uv,origin:"echo _add_path \"${HOME}/.local/bin\"; ${HOME}/.local/bin/uv generate-shell-completion zsh",hook:"uv self update",apply:source,async
 zpm load @file/rustup,origin:"${HOME}/.cargo/env",hook:"rustup self update",apply:source,async
 zpm load @empty/cargo-binstall,hook:"cargo binstall -y cargo-binstall",async
-zpm load @empty/go,hook:"${_dotfiles_dir}/zsh/go-installer.sh \"${_GO_VERSION}\" \"\${Plugin_path}\"",path:go/bin,source:plugin.zsh,apply:source:path,async
+zpm load @empty/go,hook:"${_dotfiles_dir}/zsh/go-installer.sh \"${_go_version}\" \"\${Plugin_path}\"",path:go/bin,source:plugin.zsh,apply:source:path,async
 zpm load @empty/ripgrep,hook:"cargo binstall -y ripgrep",async
 zpm load @exec/lsd,origin:"echo alias ls=lsd",hook:"cargo binstall -y lsd",async
 zpm load @empty/gopls,hook:"go install golang.org/x/tools/gopls@latest",async
