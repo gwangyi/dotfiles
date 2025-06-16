@@ -29,7 +29,7 @@ if [ ! -e "${_destination}/clangd_${_version}.tar.bz2" ] || [ ! -e "${_destinati
 	curl -fSL "https://github.com/arduino/clang-static-binaries/releases/download/${_version}/clang-format_${_version}_${_os}_${_arch}.tar.bz2" -o "${_destination}/clang-format_${_version}.tar.bz2" || exit $!
 fi
 
-${_destination}/bin/clangd --version | grep ${_version} > /dev/null 2>&1 && exit 0
+${_destination}/bin/clangd --version 2>/dev/null | grep ${_version} > /dev/null 2>&1 && exit 0
 
 rm "${_destination}/bin" -rf 2> /dev/null
 mkdir "${_destination}/bin" || exit $!

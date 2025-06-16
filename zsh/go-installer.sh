@@ -27,7 +27,7 @@ if [ ! -e "${_destination}/go${_go_version}.tar.gz" ]; then
 	curl -fSL "https://go.dev/dl/go${_go_version}.${_os}-${_arch}.tar.gz" -o ${_destination}/go${_go_version}.tar.gz || exit $!
 fi
 
-${_destination}/go/bin/go version | grep ${_go_version} > /dev/null && exit 0
+${_destination}/go/bin/go version 2> /dev/null | grep ${_go_version} > /dev/null && exit 0
 
 rm "${_destination}/go" -rf 2> /dev/null
 tar xf "${_destination}/go${_go_version}.tar.gz" -C "${_destination}" || exit $!
