@@ -79,29 +79,8 @@ local _dotfiles_dir="$(_find_dotfiles_dir)"
 eval "$(grep -Ev "^#" $(_find_dotfiles_dir)/zsh/versions.env | sed 's/\([^=]*\)=\(.*\)/local _\1_version=\2/')"
 # }}}
 
-# {{{ OS and Arch detection
-local _arch="$(uname -m)"
-local _nvim_arch
-case "$_arch" in
-    aarch64)
-        _nvim_arch=arm64
-        ;;
-    *)
-        _nvim_arch="${_arch}"
-        ;;
-esac
-
-local _os="$(uname -s)"
-case "$_os" in
-    Linux)
-        _os=linux
-        ;;
-    # TODO: MacOS
-esac
-# }}}
-
 # {{{ Run once
-local _tool_ver="0a8b58c6-4b18-11f0-bae2-4f4ffb6e5489"
+local _tool_ver="13e90c00-4b19-11f0-8e89-73e126cbc18a"
 function __install_tools {
     [ -e "${HOME}/.local/bin/uv" ] || \
         curl -LsSf https://astral.sh/uv/install.sh | env INSTALLER_NO_MODIFY_PATH=1 sh
@@ -109,6 +88,8 @@ function __install_tools {
         curl https://sh.rustup.rs -sSf | sh -s -- -y
     [ -e "${HOME}/.cargo/bin/cargo-binstall" ] || \
         curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+    [ -e "${HOME}/.local/share/pnpm/pnpm" ] || \
+        curl -fSL https://get.pnpm.io/install.sh | env ENV=/dev/null SHELL=$(which sh) bash -
 
     echo ${_tool_ver} > ${_dotfiles_dir}/.tools
 }
@@ -133,6 +114,9 @@ zpm load @exec/uv,origin:"echo _add_path \"${HOME}/.local/bin\"; ${HOME}/.local/
 zpm load @file/rustup,origin:"${HOME}/.cargo/env",hook:"rustup self update",apply:source,async
 zpm load @empty/cargo-binstall,hook:"cargo binstall -y cargo-binstall",async
 zpm load @empty/go,hook:"${_dotfiles_dir}/zsh/go-installer.sh \"${_go_version}\" \"\${Plugin_path}\"",path:go/bin,source:plugin.zsh,apply:source:path,async
+zpm load @exec/pnpm,origin:"echo export PNPM_HOME=\"\${HOME}/.local/share/pnpm\"; echo _add_path '\"\${PNPM_HOME}\"'",hook:"${HOME}/.local/share/pnpm self-update",apply:source,async
+zpm load @empty/node,hook:"pnpm env add --global ${_node_version} && pnpm env use --global ${_node_version} && pnpm add -g neovim",async
+
 zpm load @empty/ripgrep,hook:"cargo binstall -y ripgrep",async
 zpm load @exec/lsd,origin:"echo alias ls=lsd",hook:"cargo binstall -y lsd",async
 zpm load @empty/gopls,hook:"go install golang.org/x/tools/gopls@latest",async
