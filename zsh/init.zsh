@@ -101,15 +101,19 @@ esac
 # }}}
 
 # {{{ Run once
+local _tool_ver="0a8b58c6-4b18-11f0-bae2-4f4ffb6e5489"
 function __install_tools {
-    curl -LsSf https://astral.sh/uv/install.sh | env INSTALLER_NO_MODIFY_PATH=1 sh
-    curl https://sh.rustup.rs -sSf | sh -s -- -y
-    curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+    [ -e "${HOME}/.local/bin/uv" ] || \
+        curl -LsSf https://astral.sh/uv/install.sh | env INSTALLER_NO_MODIFY_PATH=1 sh
+    [ -e "${HOME}/.cargo/bin/rustup" ] || \
+        curl https://sh.rustup.rs -sSf | sh -s -- -y
+    [ -e "${HOME}/.cargo/bin/cargo-binstall" ] || \
+        curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 
-    touch ~/.firstrun
+    echo ${_tool_ver} > ${_dotfiles_dir}/.tools
 }
 
-[[ -e ~/.firstrun ]] ||  __install_tools
+[ "$(cat ${_dotfiles_dir}/.tools 2>/dev/null)" = "${_tool_ver}" ] || __install_tools
 # }}}
 
 # {{{ ZPM
@@ -125,7 +129,7 @@ source "${ZPM_PLUGINS}/@zpm/zpm.zsh"
 zpm load romkatv/powerlevel10k
 zpm load junegunn/fzf,hook:"./install --bin && cat shell/*.zsh > init.zsh",async
 zpm load @empty/nvim,hook:"${_dotfiles_dir}/zsh/nvim-installer.sh \"${_nvim_version}\" \"\${Plugin_path}\"",path:nvim/bin,source:plugin.zsh,apply:path:source,async
-zpm load @exec/uv,origin:"echo _add_path \"${HOME}/.local/bin\"; ${HOME}/.local/bin/uv generate-shell-completion zsh",hook:"uv self update",apply:source,async
+zpm load @exec/uv,origin:"echo _add_path \"${HOME}/.local/bin\"; ${HOME}/.local/bin/uv generate-shell-completion zsh",hook:"${HOME}/.local/bin/uv self update",apply:source,async
 zpm load @file/rustup,origin:"${HOME}/.cargo/env",hook:"rustup self update",apply:source,async
 zpm load @empty/cargo-binstall,hook:"cargo binstall -y cargo-binstall",async
 zpm load @empty/go,hook:"${_dotfiles_dir}/zsh/go-installer.sh \"${_go_version}\" \"\${Plugin_path}\"",path:go/bin,source:plugin.zsh,apply:source:path,async
