@@ -72,20 +72,37 @@ return {
   {
     'neovim/nvim-lspconfig',
     config = function()
+      vim.api.nvim_create_autocmd('LspAttach', {
+        group = vim.api.nvim_create_augroup('UserLspConfig', { clear = true }),
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          if client then
+            require('helpers.lspconfig').config{}.on_attach(client, args.buf)
+          end
+        end,
+      })
+
       local lspconfig = require'lspconfig'
+
       vim.lsp.config('gopls', require('helpers.lspconfig').config{
         single_file_support = false,
         root_dir = lspconfig.util.root_pattern('go.mod'),
       })
+
       vim.lsp.config('clangd', require('helpers.lspconfig').config{
         cmd = { 'clangd', '--query-driver=/usr/bin/gcc' },
         root_dir = lspconfig.util.root_pattern('compile_commands.json'),
       })
 
-      vim.lsp.enable('gopls')
-      vim.lsp.enable('clangd')
+      vim.lsp.config('bashls', require('helpers.lspconfig').config{
+        filetypes = { 'bash', 'sh', 'zsh' },
+        settings = {
+          bashIde = {
+            globPattern = '*@(.sh|.inc|.bash|.command|.zsh|.zshrc)',
+          },
+        },
+      })
 
-      vim.opt.completeopt = { "menu", "menuone", "noselect" }
       vim.opt.completeopt = { "menu", "menuone", "noselect" }
       vim.opt.shortmess:append("c")
     end,

@@ -123,8 +123,6 @@ zpm load junegunn/fzf,hook:"./install --bin && cat shell/*.zsh > init.zsh",async
 zpm load @empty/ripgrep,hook:"cargo binstall -y ripgrep",async
 zpm load @exec/lsd,origin:"echo alias ls=lsd",hook:"cargo binstall -y lsd",async
 
-zpm load @empty/gopls,hook:"go install golang.org/x/tools/gopls@latest",async
-zpm load @empty/clangd,hook:"${_dotfiles_dir}/zsh/clangd-installer.sh \"${_clangd_version}\" \"\${Plugin_path}\"",apply:path,async
 zpm load @empty/compiledb,hook:"go install github.com/fcying/compiledb-go/cmd/compiledb@latest",async
 
 zpm load zsh-users/zsh-completions
