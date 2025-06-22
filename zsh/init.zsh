@@ -71,7 +71,7 @@ eval "$(grep -Ev "^#" $(_find_dotfiles_dir)/zsh/versions.env | sed 's/\([^=]*\)=
 # }}}
 
 # {{{ Run once
-local _tool_ver="13e90c00-4b19-11f0-8e89-73e126cbc18a"
+local _tool_ver="8c5f6484-4f71-11f0-a555-1b5212f5891b"
 function __install_tools {
     [ -e "${HOME}/.local/bin/uv" ] || \
         curl -LsSf https://astral.sh/uv/install.sh | env INSTALLER_NO_MODIFY_PATH=1 sh
