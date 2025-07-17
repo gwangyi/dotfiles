@@ -86,7 +86,6 @@ return {
 
       vim.lsp.config('gopls', require('helpers.lspconfig').config{
         single_file_support = false,
-        root_dir = lspconfig.util.root_pattern('go.mod'),
       })
 
       vim.lsp.config('clangd', require('helpers.lspconfig').config{
