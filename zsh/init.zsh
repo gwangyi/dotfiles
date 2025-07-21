@@ -126,6 +126,7 @@ zpm load @empty/bat,hook:"cargo binstall -y bat",async
 zpm load @empty/gemini,hook:"pnpm i -g @google/gemini-cli",async
 
 zpm load @empty/compiledb,hook:"go install github.com/fcying/compiledb-go/cmd/compiledb@latest",async
+zpm load @remote/repo,origin:https://storage.googleapis.com/git-repo-downloads/repo,apply:path,destination:bin
 
 zpm load zsh-users/zsh-completions
 
