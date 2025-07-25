@@ -123,10 +123,13 @@ zpm load junegunn/fzf,hook:"./install --bin && cat shell/*.zsh > init.zsh",async
 zpm load @empty/ripgrep,hook:"cargo binstall -y ripgrep",async
 zpm load @exec/eza,origin:"echo alias ls=eza",hook:"cargo binstall -y eza",async
 zpm load @empty/bat,hook:"cargo binstall -y bat",async
+zpm load @empty/fd,hook:"cargo binstall -y fd-find",async
 zpm load @empty/gemini,hook:"pnpm i -g @google/gemini-cli",async
 
 zpm load @empty/compiledb,hook:"go install github.com/fcying/compiledb-go/cmd/compiledb@latest",async
 zpm load @remote/repo,origin:https://storage.googleapis.com/git-repo-downloads/repo,apply:path,destination:bin
+
+zpm load @dir/command_execution_time,origin:"${_dotfiles_dir}/zsh/plugins/command_execution_time",apply:source,source:plugin.zsh
 
 zpm load zsh-users/zsh-completions
 
