@@ -113,7 +113,7 @@ zpm load @exec/uv,origin:"echo _add_path \"${HOME}/.local/bin\"; ${HOME}/.local/
 zpm load @file/rustup,origin:"${HOME}/.cargo/env",hook:"rustup self update",apply:source,async
 zpm load @empty/cargo-binstall,hook:"cargo binstall -y cargo-binstall",async
 zpm load @empty/go,hook:"${_dotfiles_dir}/zsh/go-installer.sh \"${_go_version}\" \"\${Plugin_path}\"",path:go/bin,source:plugin.zsh,apply:source:path,async
-zpm load @exec/pnpm,origin:"echo export PNPM_HOME=\"\${HOME}/.local/share/pnpm\"; echo _add_path '\"\${PNPM_HOME}\"'",hook:"${HOME}/.local/share/pnpm self-update",apply:source,async
+zpm load @exec/pnpm,origin:"echo export PNPM_HOME=\"\${HOME}/.local/share/pnpm\"; echo _add_path '\"\${PNPM_HOME}\"'",hook:"${HOME}/.local/share/pnpm/pnpm self-update",apply:source,async
 zpm load @empty/node,hook:"pnpm env add --global ${_node_version} && pnpm env use --global ${_node_version} && pnpm add -g neovim",async
 
 zpm load @empty/nvim,hook:"${_dotfiles_dir}/zsh/nvim-installer.sh \"${_nvim_version}\" \"\${Plugin_path}\"",path:nvim/bin,source:plugin.zsh,apply:path:source,async
