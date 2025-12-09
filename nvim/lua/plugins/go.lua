@@ -5,6 +5,9 @@ return {
       "ray-x/guihua.lua",
       "neovim/nvim-lspconfig",
       "nvim-treesitter/nvim-treesitter",
+      "theHamsta/nvim-dap-virtual-text",
+      "rcarriga/nvim-dap-ui",
+      "mfussenegger/nvim-dap",
     },
     opts = {
       -- lsp_keymaps = false,
