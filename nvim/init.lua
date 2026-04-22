@@ -21,7 +21,7 @@ vim.opt.rtp:prepend(lazypath)
 -- {{{ Setup global configs
 -- Make sure to setup `mapleader` and `maplocalleader` before
 -- loading lazy.nvim so that mappings are correct.
-vim.g.mapleader = ' '
+vim.g.mapleader = '\\'
 vim.g.maplocalleader = '\\'
 
 vim.g.python3_host_prog = path .. '/py/.venv/bin/python'
