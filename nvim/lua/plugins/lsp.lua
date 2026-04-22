@@ -89,6 +89,7 @@ return {
       })
 
       vim.lsp.config('clangd', require('helpers.lspconfig').config{
+        filetypes = { 'c' },
         cmd = { 'clangd', '--query-driver=/usr/bin/gcc' },
         root_dir = lspconfig.util.root_pattern('compile_commands.json'),
       })
