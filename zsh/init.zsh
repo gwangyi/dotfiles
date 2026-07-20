@@ -1,144 +1,143 @@
-# {{{ Default .zshrc contents
-# Set up the prompt
+_dotfiles=${0:a:h:h}
 
-setopt histignorealldups sharehistory
+# =============================================================================
+# Aqua Configuration                                                       {{{1
+# =============================================================================
+# Define the root directory for Aqua and add it to the PATH so managed tools
+# (like fzf, bat, exa, etc.) are available immediately.
+export AQUA_ROOT_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/aquaproj-aqua"
+export PATH="${AQUA_ROOT_DIR}/bin:$PATH"
 
-# Use emacs keybindings even if our EDITOR is set to vi
-bindkey -e
+# Specify the global configuration file location for Aqua
+export AQUA_GLOBAL_CONFIG="$_dotfiles/aqua/aqua.yaml"
 
-# Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
-HISTSIZE=1000
-SAVEHIST=1000
-HISTFILE=~/.zsh_history
+# Automatically install Aqua if the binary does not exist
+if [ ! -f "${AQUA_ROOT_DIR}/bin/aqua" ]; then
+    echo "Installing Aqua..."
+    $_dotfiles/zsh/secure_runner.py https://raw.githubusercontent.com/aquaproj/aqua-installer/v4.0.2/aqua-installer 98b883756cdd0a6807a8c7623404bfc3bc169275ad9064dc23a6e24ad398f43d || return
 
-# Use modern completion system
+    aqua i -a -l
+fi
+
+# =============================================================================
+# Rustup                                                                   {{{1
+# =============================================================================
+
+export PATH="${CARGO_HOME:-$HOME/.cargo}/bin:$PATH"
+
+if ! command -v cargo &> /dev/null; then
+    mkdir -p "${CARGO_HOME:-$HOME/.cargo/bin}"
+    ln -s "$(aqua which rustup)" "${CARGO_HOME:-$HOME/.cargo/bin}"
+    rustup toolchain install stable
+fi
+
+# =============================================================================
+# Zinit Installation & Initialization                                      {{{1
+# =============================================================================
+# Set the directory where Zinit and its plugins will be downloaded
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+
+# Automatically install Zinit if it does not exist on the system
+if [ ! -d "$ZINIT_HOME" ]; then
+   mkdir -p "$(dirname $ZINIT_HOME)"
+   git clone --depth 1 https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+fi
+
+# Source Zinit to initialize it
+source "${ZINIT_HOME}/zinit.zsh"
+
+
+# =============================================================================
+# Zsh Basic Settings (History & Navigation)                                {{{1
+# =============================================================================
+# Configure command history limits and file location
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=10000
+SAVEHIST=10000
+
+# History options
+setopt EXTENDED_HISTORY     # Write the timestamp and duration to the history file
+setopt SHARE_HISTORY        # Share history between all active Zsh sessions
+setopt HIST_IGNORE_DUPS     # Do not record an event that was just recorded again
+setopt HIST_IGNORE_ALL_DUPS # Delete old recorded events if a new event is a duplicate
+setopt HIST_IGNORE_SPACE    # Do not record events starting with a space
+setopt HIST_SAVE_NO_DUPS    # Do not write duplicate events to the history file
+setopt HIST_VERIFY          # Do not execute immediately upon history expansion
+
+# Directory navigation options
+setopt AUTO_CD              # Change directory by just typing its name without 'cd'
+setopt AUTO_PUSHD           # Push the current directory onto the stack when changing
+setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the directory stack
+
+
+# =============================================================================
+# Completion Settings                                                      {{{1
+# =============================================================================
+# Initialize the completion system
 autoload -Uz compinit
 compinit
 
-zstyle ':completion:*' auto-description 'specify: %d'
-zstyle ':completion:*' completer _expand _complete _correct _approximate
-zstyle ':completion:*' format 'Completing %d'
+# Allow selecting completion entries with arrow keys
+zstyle ':completion:*' menu select
+# Group completions by categories
 zstyle ':completion:*' group-name ''
-zstyle ':completion:*' menu select=2
-which dircolors > /dev/null 2> /dev/null && eval "$(dircolors -b)"
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*' list-colors ''
-zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
-zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
-zstyle ':completion:*' menu select=long
-zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
-zstyle ':completion:*' use-compctl false
-zstyle ':completion:*' verbose true
+# Enable case-insensitive and partial-word completion
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
-zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
-# }}}
 
-# {{{ Configuration 
-export BINSTALL_MAXIMUM_RESOLUTION_TIMEOUT=60
-# }}}
+# =============================================================================
+# Zinit Plugins                                                            {{{1
+# =============================================================================
 
-# {{{ Utility functions
-function _add_path {
-    case ":${PATH}:" in
-        *:"$1":*)
-            ;;
-        *)
-            export PATH="$1:$PATH"
-            ;;
-    esac
-}
+# Zsh Completions                                                          {{{2
+# wait: Loads the plugin asynchronously in the background.
+# lucid: Silences the loading messages in the terminal.
+# blockf: Prevents the plugin from manipulating fpath directly
+#         (Zinit handles it).
+zinit ice wait lucid blockf
+zinit light zsh-users/zsh-completions
 
-# Find exact dotfiles directory
-function _find_dotfiles_dir() {
-    unset -f _find_dotfiles_dir
-    local _source
-    local _dotfiles_dir
-    _source="${(%):-%x}"
-    while [[ -h "${_source}" ]]; do
-        _dotfiles_dir="$(cd -P "$(dirname "${_source}")" 2> /dev/null; pwd)"
-        _source="$(readlink "${_source}")"
-        [[ "${_source}" != /* ]] && _source="${_dotfiles_dir}/${_source}"
-    done
-    _dotfiles_dir="$(cd -P "$(dirname "${_source}")/.." 2> /dev/null; pwd)"
-    echo "$_dotfiles_dir"
-}
-local _dotfiles_dir="$(_find_dotfiles_dir)"
-# }}}
+# FZF Shell Integration (Ctrl-R, Ctrl-T, Alt-C)                            {{{2
+# We fetch only the shell scripts from the official repo.
+# pick"/dev/null" tells Zinit not to load the fzf binary itself, 
+# as we assume Aqua manages the actual fzf binary.
+zinit ice wait lucid multisrc"shell/completion.zsh shell/key-bindings.zsh" id-as"junegunn/fzf" pick"/dev/null"
+zinit light junegunn/fzf
 
-# {{{ Version
-eval "$(grep -Ev "^#" $(_find_dotfiles_dir)/zsh/versions.env | sed 's/\([^=]*\)=\(.*\)/local _\1_version=\2/')"
-# }}}
+# FZF-Tab (Replaces standard Zsh completion menu with FZF)                 {{{2
+# MUST be loaded after completions, but before autosuggestions and syntax highlighting.
+zinit ice wait lucid
+zinit light Aloxaf/fzf-tab
 
-# {{{ Run once
-local _tool_ver="8c5f6484-4f71-11f0-a555-1b5212f5891b"
-function __install_tools {
-    [ -e "${HOME}/.local/bin/uv" ] || \
-        curl -LsSf https://astral.sh/uv/install.sh | env INSTALLER_NO_MODIFY_PATH=1 sh
-    [ -e "${HOME}/.cargo/bin/rustup" ] || \
-        curl https://sh.rustup.rs -sSf | sh -s -- -y
-    [ -e "${HOME}/.cargo/bin/cargo-binstall" ] || \
-        curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
-    [ -e "${HOME}/.local/share/pnpm/pnpm" ] || \
-        curl -fSL https://get.pnpm.io/install.sh | env ENV=/dev/null SHELL=$(which sh) bash -
+# Autosuggestions                                                          {{{2
+zinit ice wait lucid atload'_zsh_autosuggest_start'
+zinit light zsh-users/zsh-autosuggestions
 
-    echo ${_tool_ver} > ${_dotfiles_dir}/.tools
-}
+# Syntax Highlighting & Initialize Completions                             {{{2
+# This MUST be loaded last to work correctly.
+# atinit'...': Compiles and applies the delayed completion setups
+#              (zicompinit, zicdreplay) all at once when this syntax
+#              highlighting plugin loads.
+zinit ice wait lucid atinit'ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay'
+zinit light zdharma-continuum/fast-syntax-highlighting
 
-[ "$(cat ${_dotfiles_dir}/.tools 2>/dev/null)" = "${_tool_ver}" ] || __install_tools
-# }}}
+# Key Bindings                                                             {{{2
+zinit snippet "$_dotfiles/zsh/snippets/keybindings.zsh"
 
-# {{{ Powerlevel10k instant prompt
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-# }}}
+# Aliases                                                                  {{{2
+zinit snippet "$_dotfiles/zsh/snippets/aliases.zsh"
 
-# {{{ ZPM
-ZPM_PLUGINS="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/plugins"
+# Neovim                                                                   {{{2
+zinit snippet "$_dotfiles/nvim/init.zsh"
 
-POWERLEVEL9K_INSTALLATION_DIR="${ZPM_PLUGINS}/romkatv---powerlevel10k"
+# execution time                                                           {{{2
+zinit snippet "$HOME/workspace/execution-time/execution-time.plugin.zsh"
 
-if [[ ! -f "$ZPM_PLUGINS/@zpm/zpm.zsh" ]]; then
-  git clone --recursive https://github.com/zpm-zsh/zpm "${ZPM_PLUGINS}/@zpm"
-fi
-source "${ZPM_PLUGINS}/@zpm/zpm.zsh"
+# =============================================================================
+# Starship                                                                 {{{1
+# =============================================================================
 
-zpm load romkatv/powerlevel10k
-
-zpm load @exec/uv,origin:"echo _add_path \"${HOME}/.local/bin\"; ${HOME}/.local/bin/uv generate-shell-completion zsh",hook:"${HOME}/.local/bin/uv self update",apply:source,async
-zpm load @file/rustup,origin:"${HOME}/.cargo/env",hook:"rustup self update",apply:source,async
-zpm load @empty/cargo-binstall,hook:"cargo binstall -y cargo-binstall",async
-zpm load @empty/go,hook:"${_dotfiles_dir}/zsh/go-installer.sh \"${_go_version}\" \"\${Plugin_path}\"",path:go/bin,source:plugin.zsh,apply:source:path,async
-zpm load @exec/pnpm,origin:"echo export PNPM_HOME=\"\${HOME}/.local/share/pnpm\"; echo _add_path '\"\${PNPM_HOME}\"'",hook:"${HOME}/.local/share/pnpm/pnpm self-update",apply:source,async
-zpm load @empty/node,hook:"pnpm env add --global ${_node_version} && pnpm env use --global ${_node_version} && pnpm add -g neovim",async
-
-zpm load @empty/nvim,hook:"${_dotfiles_dir}/zsh/nvim-installer.sh \"${_nvim_version}\" \"\${Plugin_path}\"",path:nvim/bin,source:plugin.zsh,apply:path:source,async
-zpm load @dir/nvim-dotfiles,origin:"${_dotfiles_dir}/nvim",apply:source,hook:"./hook.sh",async
-
-zpm load junegunn/fzf,hook:"./install --bin && cat shell/*.zsh > init.zsh",async
-zpm load @empty/ripgrep,hook:"cargo binstall -y ripgrep",async
-zpm load @exec/eza,origin:"echo alias ls=eza",hook:"cargo binstall -y eza",async
-zpm load @empty/bat,hook:"cargo binstall -y bat",async
-zpm load @empty/fd,hook:"cargo binstall -y fd-find",async
-zpm load @empty/gemini,hook:"pnpm i -g @google/gemini-cli",async
-
-zpm load @empty/compiledb,hook:"go install github.com/fcying/compiledb-go/cmd/compiledb@latest",async
-zpm load @remote/repo,origin:https://storage.googleapis.com/git-repo-downloads/repo,apply:path,destination:bin
-
-zpm load @dir/command_execution_time,origin:"${_dotfiles_dir}/zsh/plugins/command_execution_time",apply:source,source:plugin.zsh
-
-zpm load zsh-users/zsh-completions
-
-zpm load zdharma-continuum/fast-syntax-highlighting
-# }}}
-
-# {{{ Powerlevel10k configuration
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f "${_dotfiles_dir}/zsh/p10k.zsh" ]] || source "${_dotfiles_dir}/zsh/p10k.zsh"
-# }}}
+export STARSHIP_CONFIG=$_dotfiles/starship/starship.toml
+eval "$(starship init zsh)"
 
 # vim: set fdm=marker fmr={{{,}}} ts=4 sw=4 et:

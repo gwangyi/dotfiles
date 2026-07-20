@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/aquaproj/aqua/main/json-schema/aqua-yaml.json
+# aqua - Declarative CLI Version Manager
+# https://aquaproj.github.io/
+# checksum:
+#   enabled: true
+#   require_checksum: true
+#   supported_envs:
+#   - all
+registries:
+- type: standard
+  ref: v4.539.0 # renovate: depName=aquaproj/aqua-registry
+packages:
+- name: junegunn/fzf@v0.74.0
+- name: jesseduffield/lazygit@v0.63.1
+- name: sharkdp/fd@v10.4.2
+- name: BurntSushi/ripgrep@15.2.0
+- name: rust-lang/rustup@1.29.0
+- name: astral-sh/uv@0.11.29
+- name: nodejs/node@v26.5.0
+- name: npm/cli@v12.0.1
+- name: pnpm/pnpm@v11.14.0
+- name: golang/go@go1.26.5
+- name: neovim/neovim@v0.12.4
+- name: eza-community/eza@v0.23.5
+- name: sharkdp/bat@v0.26.1
+- name: golang.org/x/tools/gopls@v0.23.0
+- name: golang/tools/goimports@v0.48.0
+- name: go-delve/delve@v1.27.0
+- name: starship/starship@v1.26.0
+- name: google-antigravity/antigravity-cli@1.1.4
+- name: anthropics/claude-code@v2.1.214
+- name: openai/codex@rust-v0.144.5
