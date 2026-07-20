@@ -101,6 +101,16 @@ format = '[[ $symbol $branch ](fg:color_fg0 bg:color_aqua)]($style)'
 [git_status]
 style = "bg:color_aqua"
 format = '[[($all_status$ahead_behind )](fg:color_fg0 bg:color_aqua)]($style)'
+conflicted = '=$count'
+ahead = '⇡$count'
+behind = '⇣$count'
+diverged = '⇕$count'
+untracked = '?$count'
+stashed = '\$$count'
+modified = '!$count'
+staged = '+$count'
+renamed = '»$count'
+deleted = '✘$count'
 
 [nodejs]
 symbol = ""
