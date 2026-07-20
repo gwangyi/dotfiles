@@ -10,8 +10,11 @@
 registries:
 - type: standard
   ref: v4.539.0 # renovate: depName=aquaproj/aqua-registry
+- name: local
+  type: local
+  path: registry.yaml
 packages:
-- name: junegunn/fzf@v0.74.0
+- name: junegunn/fzf@v0.74.1
 - name: jesseduffield/lazygit@v0.63.1
 - name: sharkdp/fd@v10.4.2
 - name: BurntSushi/ripgrep@15.2.0
@@ -27,6 +30,7 @@ packages:
 - name: golang.org/x/tools/gopls@v0.23.0
 - name: golang/tools/goimports@v0.48.0
 - name: go-delve/delve@v1.27.0
+  registry: local
 - name: starship/starship@v1.26.0
 - name: google-antigravity/antigravity-cli@1.1.4
 - name: anthropics/claude-code@v2.1.214
