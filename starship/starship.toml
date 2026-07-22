@@ -4,6 +4,7 @@ format = """
 [](color_orange)\
 $os\
 $username\
+$hostname\
 [](bg:color_yellow fg:color_orange)\
 $directory\
 [](fg:color_yellow bg:color_aqua)\
@@ -205,3 +206,8 @@ show_milliseconds = true
 # Simplified format since it will be alone on the right side
 format = "⏳ [$duration]($style)"
 style = "bold #d3869b" # Using Gruvbox purple/pink color to match the theme
+
+[hostname]
+ssh_only = false
+format = '[@ $hostname ](fg:color_fg0 bg:color_orange)'
+disabled = false
