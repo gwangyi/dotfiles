@@ -131,7 +131,8 @@ zinit snippet "$_dotfiles/zsh/snippets/aliases.zsh"
 zinit snippet "$_dotfiles/nvim/init.zsh"
 
 # execution time                                                           {{{2
-zinit snippet "$HOME/workspace/execution-time/execution-time.plugin.zsh"
+ET_NOTIFY_OSC777=yes
+zinit light gwangyi/execution-time
 
 # =============================================================================
 # Starship                                                                 {{{1
