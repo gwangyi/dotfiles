@@ -35,3 +35,6 @@ packages:
 - name: google-antigravity/antigravity-cli@1.1.4
 - name: anthropics/claude-code@v2.1.214
 - name: openai/codex@rust-v0.144.5
+- name: zellij-org/zellij@v0.44.3
+- name: gohugoio/hugo@v0.166.0
+- name: yarnpkg/berry@@yarnpkg/cli/4.18.0
